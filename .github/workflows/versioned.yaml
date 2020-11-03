@@ -1,8 +1,8 @@
-name: Tag
+name: Versioned
 on:
   push:
     tags:
-      - "*"
+      - "v*"
 
 jobs:
   build:
