@@ -2,10 +2,10 @@
 
 #simpleca_location: ""
 simpleca_common_name: SimpleCA
-simpleca_country: AU
-simpleca_org: Noveris
-simpleca_ou: IT
-simpleca_state: South Australia
+#simpleca_country: AU
+#simpleca_org: Organisation
+#simpleca_ou: OU
+#simpleca_state: "Some State"
 simpleca_days: 1825
 
 ...
