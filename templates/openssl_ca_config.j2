@@ -1,0 +1,15 @@
+[ req ]
+prompt             = no
+distinguished_name = SimpleCA
+req_extensions     = req_ext
+
+[ SimpleCA ]
+commonName = {{ simpleca_common_name }}
+countryName = {{ simpleca_country }}
+organizationName = {{ simpleca_org }}
+organizationalUnitName = {{ simpleca_ou }}
+stateOrProvinceName = {{ simpleca_state }}
+
+[ req_ext ]
+keyUsage           = critical,keyCertSign,cRLSign
+basicConstraints   = critical,CA:true

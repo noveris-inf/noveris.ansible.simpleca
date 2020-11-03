@@ -1,0 +1,46 @@
+---
+
+- name: Create certificate location
+  command: "mkdir -p {{ simpleca_location }}"
+
+- name: Certificate location
+  file:
+    state: directory
+    path: "{{ simpleca_location }}"
+    owner: root
+    group: root
+    mode: 0700
+
+- name: OpenSSL package
+  package:
+    state: present
+    name: openssl
+
+# Root CA configuration
+- name: OpenSSL CA configuration
+  template:
+    dest: "{{ simpleca_location }}/openssl_ca_config"
+    src: openssl_ca_config.j2
+    owner: root
+    group: root
+    mode: 0640
+  register: openssl_ca_config
+
+- name: Verify CA certificate
+  shell: openssl verify -CAfile {{ simpleca_location }}/ca.crt {{ simpleca_location }}/ca.crt
+  failed_when: false
+  changed_when: false
+  register: openssl_verify_ca_run
+
+- name: Regenerate CA certificate
+  when: openssl_ca_config.changed or openssl_verify_ca_run.rc != 0
+  shell: >
+    openssl req -newkey rsa:4096 -nodes -sha256 -keyout {{ simpleca_location }}/ca.key -x509
+    -days {{ simpleca_days }} -out {{ simpleca_location }}/ca.crt -config {{ simpleca_location }}/openssl_ca_config
+  register: openssl_ca_generate
+
+- name: Verify CA certificate
+  command: "openssl verify -CAfile {{ simpleca_location }}/ca.crt {{ simpleca_location }}/ca.crt"
+  changed_when: false
+
+...
